@@ -1,0 +1,44 @@
+[package]
+name = "kernel"
+version = "0.1.0"
+edition = "2021"
+# Indicates this crate is a binary-only crate, suitable for applications.
+autobins = false
+
+# Required for dynamically-sized types and allocators.
+[features]
+default = ["alloc"]
+
+[dependencies]
+# Provides implementations of core::alloc.
+alloc = { version = "0.1.0", features = ["alloc"] }
+
+# Keyboard handling
+pc-keyboard = "0.5.0"
+
+# Serial port access for debugging.
+uart_16550 = "0.2.3"
+
+# Synchronization primitives.
+spin = "0.5.2"
+
+# Volatile memory access.
+volatile = "0.2.6"
+
+# Lazy static initialization.
+lazy_static = "1.4.0"
+
+# The actual bootloader dependency is usually not directly included in the kernel's Cargo.toml,
+# unless you're specifying features or a specific version requirement.
+# bootloader = "0.11" # This might be unnecessary here unless specific features are needed.
+
+[dependencies.bootloader]
+version = "0.11"
+features = ["map_physical_memory"]
+
+# Ensure you're using the correct target specification for cross-compilation.
+[build-dependencies]
+bootimage = "0.10.3"
+
+# Custom build script to compile assembly files, etc., if necessary.
+build = "build.rs"

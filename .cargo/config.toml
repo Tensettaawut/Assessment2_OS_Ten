@@ -1,0 +1,28 @@
+[build]
+# Specify the default target triple. This should match the JSON target specification file's name.
+# For example, if you're targeting a bare-metal x86_64 system, you might have a custom target spec named
+# 'x86_64-your_os_name.json' located in your project root or a designated directory.
+target = "x86_64-unknown-none.json"
+
+[unstable]
+# This feature allows you to use build-std to compile the standard library (core, alloc) for your target.
+# It's necessary for no_std environments where the standard library is not available.
+build-std = ["core", "alloc"]
+
+[target.x86_64-unknown-none]
+# Specify a custom runner for your project. This is typically used for running your compiled kernel
+# with QEMU or another emulator. Adjust the command to fit your specific needs.
+runner = "qemu-system-x86_64 -drive format=raw,file=${workspace_root}/target/x86_64-unknown-none/debug/your_kernel_binary_name"
+
+# Example of how to pass additional arguments to the linker through RUSTFLAGS.
+# This might include specifying a custom linker script or other linker options.
+rustflags = [
+  "-C", "link-arg=-Tlinker.ld",
+  # Add any additional flags as needed.
+]
+
+# If your project requires additional environment variables, you can specify them here.
+[env]
+# Example: Set the QEMU audio driver to none to avoid sound-related errors on systems without audio support.
+QEMU_AUDIO_DRV = "none"
+
